@@ -6,14 +6,7 @@ let EntryHandler = function(app) {
   this.app = app;
 };
 
-/**
- * New client entry.
- *
- * @param  {Object}   msg     request message
- * @param  {Object}   session current session object
- * @param  {Function} next    next step callback
- * @return {Void}
- */
+// entry for new connection, should be the first request send to the server after establishing connection
  EntryHandler.prototype.entry = function(msg, session, next) {
 	const user = msg.user;
 	const rid = msg.rid;
@@ -38,7 +31,7 @@ let EntryHandler = function(app) {
 			return;
 		}
 
-		next(null, { code: 200, users: data.users });
+		next(null, { code: 200 });
 	});
 };
 

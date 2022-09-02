@@ -26,6 +26,7 @@ ChatRemote.prototype.add = function(uid, sid, rid, createChannel, callback) {
     callback({ code: 200 });
 }
 
+// kick specified user from specified channel
 ChatRemote.prototype.kick = function(uid, sid, rid, callback) {
     const username = uid.split('*')[0];
     let channel = this.channelService.getChannel(rid, false);

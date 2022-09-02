@@ -28,13 +28,24 @@ ChatHandler.prototype.getInfo = function(msg, session, next) {
         users.push(user.split('*')[0]);
     }
 
-    next(null, { username: username, rid: rid, users: users });
+    next(null, { code: 200, username: username, rid: rid, users: users });
 }
 
 // send message received from client to his current channel
 ChatHandler.prototype.send = function(msg, session, next) {
     if(!session || !session.uid || !session.get('rid')) {
         next(null, { error: true, msg: "Invalid session" });
+        return;
+    }
+
+    if(!msg.msg) {
+        next(null, { error: true, msg: 'Invalid message' });
+        return;
+    }
+
+    const message = msg.msg.toString();
+    if(message.length == 0) {
+        next(null, { error: true, msg: 'Invalid message length' });
         return;
     }
 
@@ -51,7 +62,7 @@ ChatHandler.prototype.send = function(msg, session, next) {
     channel.pushMessage({
         route: 'onUserMessage',
         user: username,
-        msg: msg.msg
+        msg: message
     });
 
     next(null, { code: 200 });
