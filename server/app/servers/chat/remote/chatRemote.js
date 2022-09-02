@@ -7,12 +7,13 @@ let ChatRemote = function(app) {
     this.channelService = app.get('channelService');
 };
 
+// adds specified user to specified channel
 ChatRemote.prototype.add = function(uid, sid, rid, createChannel, callback) {
     let channel = this.channelService.getChannel(rid, createChannel);
     let username = uid.split('*')[0];
 
     if(!channel) {
-        callback({ code: 500, error: true, msg: `Couldn't get channel ${rid}` });
+        callback({ error: true, msg: `Couldn't get channel ${rid}` });
         return;
     }
 
@@ -25,26 +26,11 @@ ChatRemote.prototype.add = function(uid, sid, rid, createChannel, callback) {
     callback({ code: 200 });
 }
 
-ChatRemote.prototype.get = function(rid, callback) {
-    let channel = this.channelService.getChannel(rid, false);
-    if(!channel) {
-        callback({ error: true, msg: `Couldn't find channel ${rid}` });
-        return;
-    }
-
-    let users = [];
-    for(const user of channel.getMembers()) {
-        users.push(user.split('*')[0]);
-    }
-
-    callback({ users: users });
-}
-
 ChatRemote.prototype.kick = function(uid, sid, rid, callback) {
     const username = uid.split('*')[0];
     let channel = this.channelService.getChannel(rid, false);
     if(!channel) {
-        callback({ code: 500, error: true, msg: `Couldn't get channel ${rid}` });
+        callback({ error: true, msg: `Couldn't get channel ${rid}` });
         return;
     }
 
@@ -54,5 +40,5 @@ ChatRemote.prototype.kick = function(uid, sid, rid, callback) {
         user: username
     });
 
-    callback({ code: 200, msg: `Left channel #${rid}`});
+    callback({ code: 200 });
 }

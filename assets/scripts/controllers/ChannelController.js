@@ -17,14 +17,6 @@ cc.Class({
 
     onLoad() {
         this.chat.onMessageSendCallback = this.onChatMessageSend.bind(this);
-        pomelo.request("chat.chatHandler.getMembers", (data) => {
-            if(data.error) {
-                console.error(data.msg);
-                return;
-            }
-
-            this.channelIdLabel.string = `#${data.rid}`;
-        });
 
         pomelo.on('onUserJoin', (data) => {
             this.chat.addMessage("SYSTEM", `User ${data.user} joined the room!`);
@@ -35,8 +27,16 @@ cc.Class({
         });
 
         pomelo.on('onUserMessage', (data) => {
-            console.log("test!");
             this.chat.addMessage(data.user, data.msg);
+        });
+
+        pomelo.request("chat.chatHandler.getInfo", (data) => {
+            if(data.error) {
+                console.error(data.msg);
+                return;
+            }
+
+            this.channelIdLabel.string = `#${data.rid}`;
         });
     },
 
